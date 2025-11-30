@@ -22,7 +22,7 @@ export function Navigation() {
 
   useEffect(() => {
     checkUser()
-    
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(() => {

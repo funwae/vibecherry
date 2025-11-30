@@ -125,7 +125,30 @@ NEXT_PUBLIC_SUPABASE_STORAGE_URL=https://your-project.supabase.co/storage/v1/obj
 
 Your app should now be live! 🎉
 
-## Step 6: Verify Deployment
+## Step 6: Seed Initial Specs (Recommended)
+
+After deployment, populate your database with AI-generated specs:
+
+1. **Option 1: Auto-seed (Easiest)**
+   ```bash
+   # In your local terminal or Vercel CLI
+   npm run seed:specs:auto
+   ```
+   This automatically creates a system user and generates 15 curated specs.
+
+2. **Option 2: Manual seeding**
+   - Create a system user in Supabase Auth
+   - Set `SYSTEM_USER_ID` environment variable
+   - Run `npm run seed:specs:curated`
+
+3. **Option 3: Full seeding**
+   ```bash
+   npm run seed:specs -- --count=100
+   ```
+
+See [SEEDING.md](./SEEDING.md) for detailed instructions.
+
+## Step 7: Verify Deployment
 
 1. **Visit your Vercel URL** (e.g., `https://vibecherry.vercel.app`)
 2. **Test the signup flow:**
@@ -137,6 +160,11 @@ Your app should now be live! 🎉
    - Create a spec
    - Verify it saves to the database
    - Check that usage limits are tracked
+
+4. **Browse the Feed:**
+   - After seeding, you should see specs in the feed
+   - Test search and filtering
+   - Verify specs are downloadable
 
 ## Troubleshooting
 

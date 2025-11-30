@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "worker": "tsx services/screenshot/worker.ts"
+    "worker": "tsx services/screenshot/worker.ts",
+    "seed:specs": "tsx scripts/seed-specs.ts",
+    "seed:specs:curated": "tsx scripts/seed-specs-simple.ts",
+    "seed:specs:auto": "tsx scripts/seed-specs-auto.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
