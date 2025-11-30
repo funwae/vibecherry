@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@/components/ui'
 import { ArrowLeft, Trash2 } from 'lucide-react'
@@ -15,11 +15,7 @@ export default function SettingsPage() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchUser()
-  }, [])
-
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -33,7 +29,11 @@ export default function SettingsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
   const handleDeleteAccount = async () => {
     if (

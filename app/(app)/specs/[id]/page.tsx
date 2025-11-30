@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button, Card, CardContent } from '@/components/ui'
 import { Heart, Download, Calendar, User, ArrowLeft, Copy, Check } from 'lucide-react'
@@ -17,11 +17,7 @@ export default function SpecDetailPage() {
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
 
-  useEffect(() => {
-    fetchSpec()
-  }, [params.id])
-
-  const fetchSpec = async () => {
+  const fetchSpec = useCallback(async () => {
     try {
       const response = await fetch(`/api/specs?id=${params.id}`)
       if (response.ok) {
@@ -33,7 +29,11 @@ export default function SpecDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.id])
+
+  useEffect(() => {
+    fetchSpec()
+  }, [fetchSpec])
 
   const handleUpvote = async () => {
     if (!spec) return

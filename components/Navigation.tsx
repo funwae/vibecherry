@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -13,9 +13,16 @@ export function Navigation() {
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
 
+  const checkUser = useCallback(async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    setUser(user)
+  }, [supabase])
+
   useEffect(() => {
     checkUser()
-
+    
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(() => {
@@ -23,14 +30,7 @@ export function Navigation() {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
-
-  const checkUser = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    setUser(user)
-  }
+  }, [checkUser, supabase])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()

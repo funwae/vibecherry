@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
 import { SpecCard } from '@/components/Feed/SpecCard'
@@ -16,11 +16,7 @@ export default function CollectionDetailPage() {
   const [specs, setSpecs] = useState<Spec[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchCollection()
-  }, [params.id])
-
-  const fetchCollection = async () => {
+  const fetchCollection = useCallback(async () => {
     try {
       const response = await fetch(`/api/collections?id=${params.id}`)
       if (response.ok) {
@@ -33,7 +29,11 @@ export default function CollectionDetailPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.id])
+
+  useEffect(() => {
+    fetchCollection()
+  }, [fetchCollection])
 
   const removeSpec = async (specId: string) => {
     try {

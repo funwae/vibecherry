@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, Textarea } from '@/components/ui'
 import { Settings, User, FileText, Heart, Download } from 'lucide-react'
@@ -19,12 +19,7 @@ export default function ProfilePage() {
   const [editing, setEditing] = useState(false)
   const [editForm, setEditForm] = useState({ display_name: '', bio: '' })
 
-  useEffect(() => {
-    fetchProfile()
-    fetchUserSpecs()
-  }, [])
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -53,9 +48,9 @@ export default function ProfilePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [router, supabase])
 
-  const fetchUserSpecs = async () => {
+  const fetchUserSpecs = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -71,7 +66,12 @@ export default function ProfilePage() {
     } catch (error) {
       console.error('Error fetching user specs:', error)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    fetchProfile()
+    fetchUserSpecs()
+  }, [fetchProfile, fetchUserSpecs])
 
   const updateProfile = async () => {
     try {

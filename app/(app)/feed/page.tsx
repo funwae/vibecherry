@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Card, CardContent, Input } from '@/components/ui'
 import { SpecCard } from '@/components/Feed/SpecCard'
@@ -29,7 +29,7 @@ export default function FeedPage() {
   })
   const [showFilters, setShowFilters] = useState(false)
 
-  const fetchSpecs = async () => {
+  const fetchSpecs = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -49,11 +49,11 @@ export default function FeedPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters, sort, searchQuery])
 
   useEffect(() => {
     fetchSpecs()
-  }, [filters, sort, searchQuery])
+  }, [fetchSpecs])
 
   const handleUpvote = async (specId: string) => {
     try {

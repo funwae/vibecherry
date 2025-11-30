@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { WriterState } from '@/lib/types'
 import { Button, Card, CardContent } from '@/components/ui'
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react'
@@ -29,7 +29,7 @@ export function StepFour({
     'Polishing output...',
   ]
 
-  const generateSpec = async () => {
+  const generateSpec = useCallback(async () => {
     setIsGenerating(true)
     setError(null)
     setStage(stages[0])
@@ -64,13 +64,14 @@ export function StepFour({
     } finally {
       setIsGenerating(false)
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.title, state.description, state.category, state.specType, state.vibe, state.features, state.pages])
 
   useEffect(() => {
     if (state.step === 4 && !generatedSpec && !isGenerating) {
       generateSpec()
     }
-  }, [state.step])
+  }, [state.step, generatedSpec, isGenerating, generateSpec])
 
   return (
     <div className="space-y-6">
